@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+  <head>
+	<!--<link rel="stylesheet" href="todo.css">-->
+  </head>
+  <body ng-app="etrade" ng-controller="StationCtrl">
+    <div>
+      <label>Data upload!</label>
+      <hr>
+    </div>
+    <div>
+      <label> Server Name:</label>
+      <input type="text" ng-model="ServerName" placeholder="Enter server name">
+      <br>
+      <label> Server Password:</label>
+      <input type="text" ng-model="ServerPasswd" placeholder="Enter server password">
+      <br>
+	  <label> Enter stations names:</label>
+    </div>
+	<div>
+      <ul class="unstyled">
+        <li ng-repeat="station in stations">
+          <span>{{station.name}}</span>
+		  <button ng-click="dropstation($index)">-</button>
+        </li>
+      </ul>
+      <form ng-submit="addStation()">
+        <input type="text" ng-model="stationName"  size="30"
+               placeholder="add new station here">
+        <input class="btn-primary" type="submit" value="add">
+      </form>
+    </div>
+	<div>
+	<label> Start of Game:</label>
+	  <input type="text" ng-model="StartTime" placeholder="YYYY/MM/DD HH:MM:SS">
+      <br>
+      <label> Term of Round:</label>
+      <input type="text" ng-model="RoundTerm" placeholder="HH:MM:SS">
+      <br>
+	  <label> Number of Round:</label>
+      <input type="text" ng-model="RoundNumber" placeholder="Enter number">
+      <br>
+	</div>
+	<button ng-click="callRest()">BUTTON</button>
+	
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.14/angular.min.js"></script>
+	<script src="angular-resource.js"></script>
+	<script>
+		var services = angular.module("etrade.services", []);
+		services.factory('SessionFactory', function () {
+			var self,
+            selfDefault;
+
+        selfDefault = function () {
+            return {
+                
+				setGame: function (g) {
+					self.game = g;
+				},
+				
+                game: {
+                    gameSessionID: ''
+                },
+
+                station: {},
+
+                teams: [],
+
+                teamsByID: [],
+
+                identified_players: [],
+
+                rounds: [],
+
+                resetGameSession: function () {
+                    angular.copy(selfDefault(), self);
+                }
+
+            };
+        };
+
+        self = selfDefault();
+        return self;
+		});
+	</script>
+	<script src="resources.js"></script>
+	<script>
+		var app = angular.module('etrade', ["etrade.services", "etrade.resources", "ngResource"])
+		.constant('API',"http://api-etradeapp.rhcloud.com");
+	</script>
+	<script src="station.js"></script>
+	<script src="round.js"></script>
+	<script src="app.js"></script>
+  </body>
+</html>
